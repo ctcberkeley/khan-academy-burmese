@@ -1,6 +1,6 @@
 class Video < ActiveRecord::Base
-	attr_accessible :course, :qa_complete, :qa_id, :subject, :title, 
-	:translate_complete, :translator_id, :type_complete, :typer_id, :video_id, :due_date, :translation_handwritten
+	attr_accessible :course, :qa_complete, :qa_id, :subject, :title, :translate_progress, :type_progress, :qa_progress, 
+  :translate_complete, :translator_id, :type_complete, :typer_id, :video_id, :due_date, :translation_handwritten
 
 	validates :video_id, :presence => true, :uniqueness => true
 
@@ -56,15 +56,15 @@ class Video < ActiveRecord::Base
   end
 
   def self.find_progress_trans()
-    Video.where(:translate_progress => true)
+    videos = Video.where(:translate_progress => true)
   end
 
   def self.find_progress_digi()
-    Video.where(:type_progress => true)
+    videos = Video.where(:type_progress => true)
   end
 
   def self.find_progress_qa()
-    Video.where(:qa_progress => true)
+    videos = Video.where(:qa_progress => true)
   end
 
   def self.find_comp_trans(user_id)

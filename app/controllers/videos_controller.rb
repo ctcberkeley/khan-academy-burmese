@@ -14,6 +14,7 @@ class VideosController < ApplicationController
     find_user_vids(params[:id])
     find_avail_vids(params[:id])
     find_comp_vids(params[:id])
+    find_progress_vids(params[:id])
     initialize_cached_nums()
   end
 

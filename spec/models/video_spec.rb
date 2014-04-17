@@ -16,6 +16,9 @@ describe Video do
 		it { should respond_to(:translator_id) }
 		it { should respond_to(:typer_id) }
 		it { should respond_to(:qa_id) }
+		it { should respond_to(:translate_progress) }
+		it { should respond_to(:type_progress) }
+		it { should respond_to(:qa_progress) }
 		it { should respond_to(:translate_complete) }
 		it { should respond_to(:type_complete) }
 		it { should respond_to(:qa_complete) }
@@ -40,6 +43,9 @@ describe Video do
 		its(:translator_id) { should == 1 }
 		its(:typer_id) { should == 2 }
 		its(:qa_id) { should == nil }
+		it { should_not be_translate_progress }
+		it { should_not be_type_progress }
+		it { should_not be_qa_progress }
 		it { should be_translate_complete }
 		it { should be_type_complete }
 		it { should_not be_qa_complete }

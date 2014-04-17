@@ -24,7 +24,6 @@ group :development, :test do
   gem 'sqlite3'
   gem 'pg'
   gem 'rails_12factor'
-  gem 'ruby-debug19'
   gem 'database_cleaner'
   gem 'capybara'
   gem 'launchy'

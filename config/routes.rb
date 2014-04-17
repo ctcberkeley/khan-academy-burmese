@@ -57,6 +57,7 @@ KABT::Application.routes.draw do
   match 'users/:id/videos/available' => 'videos#available', via: 'get', as: :show_dashboard
   match 'users/:id/videos/digitize' => 'videos#digitize', via: 'get', as: :digitize
   match 'users/:id/videos/qa' => 'videos#qa', via: 'get', as: :qa
+  match 'users/:id/videos/progress' => 'videos#progress', via: 'get', as: :progress
   match 'users/:id/videos/completed' => 'videos#completed', via: 'get', as: :completed
   devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
   devise_scope :user do
