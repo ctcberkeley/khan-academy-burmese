@@ -10,11 +10,6 @@
           =link_to "Logout", "/logout", :method => :delete, :confirm => "Are you sure you wish to logout?"
         %li.profile
           =link_to("Profile", user_path(current_user))
-        // JT code
-        //%li.progress 
-        //  =link_to("Progress", progress_path))
-        // progress path doesn't exist yet 
-        //
         %li.dashboard
           =link_to "Dashboard", show_dashboard_path(current_user)
         - if current_user.admin?
