@@ -15,6 +15,7 @@
             %th.kabt_course Course
             %th.kabt_title Title
             %th.kabt_dd Due Date
+            %th.kabt_id Name
 
 
           - @prog_trans.each do |video|
@@ -22,6 +23,7 @@
               %td= video.course
               %td= video.title
               %td= video.due_date.strftime('%b %d %Y')
+              %td= User.find(video.translator_id).name
 
         %h4{:class => "list-title"} Videos Being Digitized
         %table.table.table-bordered{:id => "list_table"}
