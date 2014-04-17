@@ -44,8 +44,7 @@ class Video < ActiveRecord::Base
 
 
   def self.find_avail_trans()
-  videos = Video.where(:translator_id => nil, :translate_complete => false)
-
+    videos = Video.where(:translator_id => nil, :translate_complete => false)
   end
 
   def self.find_avail_digi(user_id)
@@ -54,6 +53,18 @@ class Video < ActiveRecord::Base
 
   def self.find_avail_qa(user_id)
   	Video.where('qa_id IS NULL AND typer_id IS NOT NULL AND type_complete = ? AND qa_complete = ? AND translator_id != ? AND typer_id != ?', true, false, user_id, user_id)
+  end
+
+  def self.find_progress_trans()
+    Video.where(:translate_progress => true)
+  end
+
+  def self.find_progress_digi()
+    Video.where(:type_progress => true)
+  end
+
+  def self.find_progress_qa()
+    Video.where(:qa_progress => true)
   end
 
   def self.find_comp_trans(user_id)

@@ -35,6 +35,12 @@ class VideosController < ApplicationController
     @avail_vids_num = @avail_trans.length + @avail_digi.length + @avail_qa.length
   end
 
+  def find_progress_vids(user_id)
+    @progress_trans = Video.find_progress_trans()
+    @progress_digi = Video.find_progress_digi()
+    @progress_qa = Video.find_progress_qa()
+    @progress_vids_num = @progress_trans.length + @progress_digi.length + @progress_qa.length
+  
   def find_comp_vids(user_id)
     @comp_trans = Video.find_comp_trans(user_id)
     @comp_digi = Video.find_comp_digi(user_id)
@@ -111,6 +117,7 @@ class VideosController < ApplicationController
     v = Video.find_by_video_id video_id
     v.update_attributes!(
       :translator_id => user_id,
+      :translate_progress => true,
       :due_date => 1.month.from_now
     )
   end
@@ -143,6 +150,7 @@ class VideosController < ApplicationController
     v = Video.find_by_video_id video_id
     v.update_attributes!(
       :typer_id => user_id,
+      :type_progress => true,
       :due_date => 1.month.from_now
       )
   end
@@ -175,6 +183,7 @@ class VideosController < ApplicationController
     v = Video.find_by_video_id video_id
     v.update_attributes!(
       :qa_id => user_id,
+      :qa_progress => true,
       :due_date => 1.month.from_now
     )
   end

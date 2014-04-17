@@ -1,0 +1,51 @@
+-#view for translations
+
+%html
+
+  %head
+    = stylesheet_link_tag 'videos'
+  %body
+    = render :partial => "shared/dashhead"
+    = render :partial => "shared/nav"
+    .container
+      .content
+        %h4{:class => "list-title"} Translations In Progress
+        %table.table.table-bordered{:id => "list_table"}
+          %tr
+            %th.kabt_name Translator Name
+            %th.kabt_title Title
+            %th.kabt_email E-Mail
+
+          - @progress_trans.each do |video|
+            %tr 
+              %td= video.translator_id
+              %td= video.title
+              %td= video.translator_id.email
+
+
+        %h4{:class => "list-title"} Digitizations In Progress
+        %table.table.table-bordered{:id => "list_table"}
+          %tr
+            %th.kabt_name Digitizer Name
+            %th.kabt_title Title
+            %th.kabt_email E-Mail
+
+          - @progress_digi.each do |video|
+            %tr 
+              %td= video.typer_id
+              %td= video.title
+              %td= video.typer_id.email
+
+
+        %h4{:class => "list-title"} Videos Available To QA
+        %table.table.table-bordered{:id => "list_table"}
+          %tr
+            %th.kabt_name QA Name
+            %th.kabt_title Title
+            %th.kabt_email E-Mail
+
+          - @progress_qa.each do |video|
+            %tr 
+              %td= video.qa_id
+              %td= video.title
+              %td= video.qa_id.email
