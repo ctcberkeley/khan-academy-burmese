@@ -39,6 +39,8 @@ ActiveRecord::Schema.define(:version => 20131205025659) do
     t.datetime "updated_at",              :null => false
     t.string   "translation_handwritten"
     t.date     "due_date"
+
+
   end
 
   add_index "videos", ["video_id"], :name => "index_videos_on_video_id", :unique => true
