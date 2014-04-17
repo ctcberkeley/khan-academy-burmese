@@ -24,6 +24,9 @@ class VideosController < ApplicationController
     @digi_vids  = Video.find_user_digi(user_id)
     @digi_vids_num  = @digi_vids.length
 
+    #@prog_vids  = Video.find_prog_vids()
+    #@prog_vids_num  = @prog_vids.length
+
     @qa_vids = Video.find_user_qa(user_id)
     @qa_vids_num = @qa_vids.length
   end
@@ -42,11 +45,11 @@ class VideosController < ApplicationController
     @comp_vids_num = @comp_trans.length + @comp_digi.length + @comp_qa.length
   end
 
-  def find_prog_vids(user_id)
-    @comp_trans = Video.find_comp_trans(user_id)
-    @comp_digi = Video.find_comp_digi(user_id)
-    @comp_qa = Video.find_comp_qa(user_id)
-    @comp_vids_num = @comp_trans.length + @comp_digi.length + @comp_qa.length
+  def find_prog_vids
+    @prog_trans = Video.find_prog_trans() # @prog_trans now contains all videos that are in progress
+    @prog_digi = Video.find_prog_digi()
+    @prog_qa = Video.find_prog_qa()
+    @prog_vids_num = @prog_trans.length + @prog_digi.length + @prog_qa.length
   end
 
   def initialize_cached_nums
@@ -108,11 +111,19 @@ class VideosController < ApplicationController
 
   def progress
     @user = current_user
-    find_prog_vids(params[:id])
-    @comp_vids_num = @comp_trans.length + @comp_digi.length + @comp_qa.length
-    $comp = @comp_vids_num
+    find_prog_vids()
+    @prog_vids_num = @prog_trans.length + @prog_digi.length + @prog_qa.length
+    $prog = @prog_vids_num
     set_cache_nums()
   end
+
+  #def find_prog_vids
+  #  @prog_trans = Video.find_prog_trans() # @prog_trans now contains all videos that are in progress
+  #  @prog_digi = Video.find_prog_digi()
+  #  @prog_qa = Video.find_prog_qa()
+  # @prog_vids_num = @prog_trans.length + @prog_digi.length + @prog_qa.length
+  #end
+  
 
 
 

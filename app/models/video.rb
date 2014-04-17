@@ -59,6 +59,20 @@ class Video < ActiveRecord::Base
   def self.find_comp_trans(user_id)
   	Video.where(:translate_complete => true, :translator_id => user_id)
   end
+  # tiffjenn code
+  def self.find_prog_trans
+    Video.where(:translator_id => ! nil, :translate_complete => false)
+  end
+
+  def self.find_prog_digi
+    Video.where('typer_id IS NOT NULL AND translator_id IS NOT NULL AND translate_complete = ? and type_complete = ?', true, false)
+  end
+
+  def self.find_prog_qa
+    Video.where('qa_id IS NOT NULL AND typer_id IS NOT NULL AND type_complete = ? AND qa_complete = ?', true, false)
+  end
+
+  #
 
   def self.find_comp_digi(user_id)
   	Video.where('type_complete = ? AND typer_id = ? AND translator_id != ?', true, user_id, user_id)
