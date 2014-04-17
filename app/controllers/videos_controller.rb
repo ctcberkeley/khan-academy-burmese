@@ -42,6 +42,13 @@ class VideosController < ApplicationController
     @comp_vids_num = @comp_trans.length + @comp_digi.length + @comp_qa.length
   end
 
+  def find_prog_vids(user_id)
+    @comp_trans = Video.find_comp_trans(user_id)
+    @comp_digi = Video.find_comp_digi(user_id)
+    @comp_qa = Video.find_comp_qa(user_id)
+    @comp_vids_num = @comp_trans.length + @comp_digi.length + @comp_qa.length
+  end
+
   def initialize_cached_nums
     $avail = @avail_vids_num
     $trans = @trans_vids_num
@@ -94,6 +101,14 @@ class VideosController < ApplicationController
   def completed
     @user = current_user
     find_comp_vids(params[:id])
+    @comp_vids_num = @comp_trans.length + @comp_digi.length + @comp_qa.length
+    $comp = @comp_vids_num
+    set_cache_nums()
+  end
+
+  def progress
+    @user = current_user
+    find_prog_vids(params[:id])
     @comp_vids_num = @comp_trans.length + @comp_digi.length + @comp_qa.length
     $comp = @comp_vids_num
     set_cache_nums()
