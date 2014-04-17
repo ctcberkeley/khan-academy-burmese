@@ -40,6 +40,7 @@ class VideosController < ApplicationController
     @progress_digi = Video.find_progress_digi()
     @progress_qa = Video.find_progress_qa()
     @progress_vids_num = @progress_trans.length + @progress_digi.length + @progress_qa.length
+  end
   
   def find_comp_vids(user_id)
     @comp_trans = Video.find_comp_trans(user_id)
@@ -59,8 +60,8 @@ class VideosController < ApplicationController
 
 
   def available
-  @user = current_user
-  video_setup()
+    @user = current_user
+    video_setup()
   end
 
   def set_cache_nums
@@ -131,7 +132,8 @@ class VideosController < ApplicationController
   def unassign_translater_by_ids(video_id, user_id)
     v = Video.find_by_video_id video_id
     v.update_attributes!(
-      :translator_id => nil
+      :translator_id => nil,
+      :translate_progress => false
     )
   end
 
@@ -164,7 +166,8 @@ class VideosController < ApplicationController
   def unassign_typer_by_ids(video_id, user_id)
     v = Video.find_by_video_id video_id
     v.update_attributes!(
-      :typer_id => nil
+      :typer_id => nil,
+      :type_progress => false
     )
   end
 
@@ -197,7 +200,8 @@ class VideosController < ApplicationController
   def unassign_qa_by_ids(video_id, user_id)
     v = Video.find_by_video_id video_id
     v.update_attributes!(
-      :qa_id => nil
+      :qa_id => nil,
+      :qa_progress => false
     )
   end
 
@@ -269,25 +273,30 @@ class VideosController < ApplicationController
   def set_handwritten_translate_complete
     set_complete("translate")
     flash[:success] = "#{@vid.title} is now ready to be digitized"
+    @vid.update_attributes!(:translate_progress => false)
     redirect_to translate_path(params[:id])
   end
 
   def set_digital_translate_complete
     set_complete("translate")
     flash[:success]= "#{@vid.title} is now ready to be QAed."
-    @vid.update_attributes!(:type_complete => true, :typer_id => params[:id])
+    @vid.update_attributes!(:type_complete => true,
+                            :type_progress => false, 
+                            :typer_id => params[:id])
     redirect_to translate_path(params[:id])
   end
 
  def set_type_complete
     set_complete("type")
     flash[:success]= "#{@vid.title} is now ready to be QAed."
+    @vid.update_attributes!(:type_progress => false)
     redirect_to digitize_path(params[:id])
   end
 
   def set_qa_complete
     set_complete("qa")
     flash[:success]= "#{@vid.title} is now completed."
+    @vid.update_attributes!(:qa_progress => false)
     redirect_to qa_path(params[:id])
   end
 
