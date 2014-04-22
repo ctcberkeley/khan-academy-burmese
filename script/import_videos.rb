@@ -70,9 +70,6 @@ CSV.foreach(ARGV[0]) do |row|
       :subject => subject,
       :course => course,
       :title => title,
-      :translate_progress => false,
-      :type_progress => false,
-      :qa_progress => false,
       :translate_complete => false,
       :type_complete => false,
       :qa_complete => false

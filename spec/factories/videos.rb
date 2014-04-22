@@ -7,9 +7,6 @@ FactoryGirl.define do
     translator_id 1
     typer_id 1
     qa_id nil
-    translate_progress false
-    type_progress false
-    qa_progress false
     translate_complete true
     type_complete true
     qa_complete false

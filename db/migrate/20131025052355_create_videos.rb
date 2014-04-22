@@ -8,9 +8,6 @@ class CreateVideos < ActiveRecord::Migration
       t.integer :translator_id
       t.integer :typer_id
       t.integer :qa_id
-      t.boolean :translate_progress
-      t.boolean :type_progress
-      t.boolean :qa_progress
       t.boolean :translate_complete
       t.boolean :type_complete
       t.boolean :qa_complete

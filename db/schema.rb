@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131205025659) do
+ActiveRecord::Schema.define(:version => 20140422020655) do
 
   create_table "users", :force => true do |t|
     t.string   "name"
@@ -39,6 +39,9 @@ ActiveRecord::Schema.define(:version => 20131205025659) do
     t.datetime "updated_at",              :null => false
     t.string   "translation_handwritten"
     t.date     "due_date"
+    t.boolean  "trans_prog"
+    t.boolean  "digi_prog"
+    t.boolean  "qa_prog"
   end
 
   add_index "videos", ["video_id"], :name => "index_videos_on_video_id", :unique => true

@@ -14,7 +14,7 @@ class VideosController < ApplicationController
     find_user_vids(params[:id])
     find_avail_vids(params[:id])
     find_comp_vids(params[:id])
-    find_progress_vids(params[:id])
+    find_prog_vids
     initialize_cached_nums()
   end
 
@@ -24,6 +24,9 @@ class VideosController < ApplicationController
 
     @digi_vids  = Video.find_user_digi(user_id)
     @digi_vids_num  = @digi_vids.length
+
+    #@prog_vids  = Video.find_prog_vids()
+    #@prog_vids_num  = @prog_vids.length
 
     @qa_vids = Video.find_user_qa(user_id)
     @qa_vids_num = @qa_vids.length
@@ -36,18 +39,18 @@ class VideosController < ApplicationController
     @avail_vids_num = @avail_trans.length + @avail_digi.length + @avail_qa.length
   end
 
-  def find_progress_vids(user_id)
-    @progress_trans = Video.find_progress_trans()
-    @progress_digi = Video.find_progress_digi()
-    @progress_qa = Video.find_progress_qa()
-    @progress_vids_num = @progress_trans.length + @progress_digi.length + @progress_qa.length
-  end
-  
   def find_comp_vids(user_id)
     @comp_trans = Video.find_comp_trans(user_id)
     @comp_digi = Video.find_comp_digi(user_id)
     @comp_qa = Video.find_comp_qa(user_id)
     @comp_vids_num = @comp_trans.length + @comp_digi.length + @comp_qa.length
+  end
+
+  def find_prog_vids
+    @prog_trans = Video.find_prog_trans() # @prog_trans now contains all videos that are in progress
+    @prog_digi = Video.find_prog_digi()
+    @prog_qa = Video.find_prog_qa()
+    @prog_vids_num = @prog_trans.length + @prog_digi.length + @prog_qa.length
   end
 
   def initialize_cached_nums
@@ -61,8 +64,8 @@ class VideosController < ApplicationController
 
 
   def available
-    @user = current_user
-    video_setup()
+  @user = current_user
+  video_setup()
   end
 
   def set_cache_nums
@@ -71,6 +74,7 @@ class VideosController < ApplicationController
     @digi_vids_num = $digi
     @qa_vids_num = $qa
     @comp_vids_num = $comp
+    @prog_vids_num = $prog
   end
 
   def translate
@@ -107,6 +111,22 @@ class VideosController < ApplicationController
     set_cache_nums()
   end
 
+  def progress
+    @user = current_user
+    find_prog_vids()
+    @prog_vids_num = @prog_trans.length + @prog_digi.length + @prog_qa.length
+    $prog = @prog_vids_num
+    set_cache_nums()
+  end
+
+  #def find_prog_vids
+  #  @prog_trans = Video.find_prog_trans() # @prog_trans now contains all videos that are in progress
+  #  @prog_digi = Video.find_prog_digi()
+  #  @prog_qa = Video.find_prog_qa()
+  # @prog_vids_num = @prog_trans.length + @prog_digi.length + @prog_qa.length
+  #end
+  
+
 
 
   #TODO: add notices to inform user of successful assign/unassign/complete
@@ -119,9 +139,10 @@ class VideosController < ApplicationController
     v = Video.find_by_video_id video_id
     v.update_attributes!(
       :translator_id => user_id,
-      :translate_progress => true,
       :due_date => 1.month.from_now
     )
+    v.trans_prog = true
+    v.save
   end
 
   def unassign_translator
@@ -133,9 +154,10 @@ class VideosController < ApplicationController
   def unassign_translater_by_ids(video_id, user_id)
     v = Video.find_by_video_id video_id
     v.update_attributes!(
-      :translator_id => nil,
-      :translate_progress => false
+      :translator_id => nil
     )
+    v.trans_prog = false
+    v.save
   end
 
   def admin_unassign_translator
@@ -153,9 +175,10 @@ class VideosController < ApplicationController
     v = Video.find_by_video_id video_id
     v.update_attributes!(
       :typer_id => user_id,
-      :type_progress => true,
       :due_date => 1.month.from_now
       )
+    v.digi_prog = true
+    v.save
   end
 
   def unassign_typer
@@ -167,9 +190,10 @@ class VideosController < ApplicationController
   def unassign_typer_by_ids(video_id, user_id)
     v = Video.find_by_video_id video_id
     v.update_attributes!(
-      :typer_id => nil,
-      :type_progress => false
+      :typer_id => nil
     )
+    v.digi_prog = false
+    v.save
   end
 
   def admin_unassign_typer
@@ -187,9 +211,10 @@ class VideosController < ApplicationController
     v = Video.find_by_video_id video_id
     v.update_attributes!(
       :qa_id => user_id,
-      :qa_progress => true,
       :due_date => 1.month.from_now
     )
+    v.qa_prog = true
+    v.save
   end
 
   def unassign_qa
@@ -201,9 +226,10 @@ class VideosController < ApplicationController
   def unassign_qa_by_ids(video_id, user_id)
     v = Video.find_by_video_id video_id
     v.update_attributes!(
-      :qa_id => nil,
-      :qa_progress => false
+      :qa_id => nil
     )
+    v.qa_prog = false
+    v.save
   end
 
   def admin_unassign_qa
@@ -269,37 +295,34 @@ class VideosController < ApplicationController
   end
 
 
-
+  # TODO: THESE 4 METHODS NEED TO BE FIXED
 
   def set_handwritten_translate_complete
     set_complete("translate")
     flash[:success] = "#{@vid.title} is now ready to be digitized"
-    @vid.update_attributes!(:translate_progress => false)
     redirect_to translate_path(params[:id])
   end
 
   def set_digital_translate_complete
     set_complete("translate")
     flash[:success]= "#{@vid.title} is now ready to be QAed."
-    @vid.update_attributes!(:type_complete => true,
-                            :type_progress => false, 
-                            :typer_id => params[:id])
+    @vid.update_attributes!(:type_complete => true, :typer_id => params[:id])
     redirect_to translate_path(params[:id])
   end
 
  def set_type_complete
     set_complete("type")
     flash[:success]= "#{@vid.title} is now ready to be QAed."
-    @vid.update_attributes!(:type_progress => false)
     redirect_to digitize_path(params[:id])
   end
 
   def set_qa_complete
     set_complete("qa")
     flash[:success]= "#{@vid.title} is now completed."
-    @vid.update_attributes!(:qa_progress => false)
     redirect_to qa_path(params[:id])
   end
+
+  # END TODO
 
   def set_complete(type)
    @vid = Video.find_by_video_id(params[:video_id])

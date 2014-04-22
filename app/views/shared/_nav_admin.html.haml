@@ -12,6 +12,9 @@
 .qa_button{:class => "button", :id => "qa"}
  %a{:class => 'a_link', :href => qa_path, :id => "the_qa_button"} QA(#{@qa_vids.count})
 
+.prog_button{:class => "button", :id => "prog"}
+ %a{:class => 'a_link', :href => qa_path, :id => "the_prog_button"} Progress(#{@prog_vids.count})
+
 .compl_button{:class => "button", :id => "compl"}
  %a{:class => 'a_link', :href => completed_path, :id => "the_compl_button"} Completed(#{@comp.count})
 
