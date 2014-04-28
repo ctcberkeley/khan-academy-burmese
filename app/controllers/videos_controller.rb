@@ -300,25 +300,28 @@ class VideosController < ApplicationController
   def set_handwritten_translate_complete
     set_complete("translate")
     flash[:success] = "#{@vid.title} is now ready to be digitized"
+    @vid.update_attributes!(:trans_prog => false, :digi_prog => false)
     redirect_to translate_path(params[:id])
   end
 
   def set_digital_translate_complete
     set_complete("translate")
     flash[:success]= "#{@vid.title} is now ready to be QAed."
-    @vid.update_attributes!(:type_complete => true, :typer_id => params[:id])
+    @vid.update_attributes!(:type_complete => true, :trans_prog => false, :digi_prog => false, :typer_id => params[:id])
     redirect_to translate_path(params[:id])
   end
 
  def set_type_complete
     set_complete("type")
     flash[:success]= "#{@vid.title} is now ready to be QAed."
+    @vid.update_attributes!(:trans_prog => false, :digi_prog => false)
     redirect_to digitize_path(params[:id])
   end
 
   def set_qa_complete
     set_complete("qa")
     flash[:success]= "#{@vid.title} is now completed."
+    @vid.update_attributes!(:qa_prog => false)
     redirect_to qa_path(params[:id])
   end
 

@@ -1,6 +1,5 @@
 class Video < ActiveRecord::Base
-	attr_accessible :course, :qa_complete, :qa_id, :subject, :title, 
-	:translate_complete, :translator_id, :type_complete, :typer_id, :video_id, :due_date, :translation_handwritten
+	attr_accessible :course, :qa_complete, :qa_id, :subject, :title, :translate_complete, :translator_id, :type_complete, :typer_id, :video_id, :due_date, :translation_handwritten, :digi_prog, :trans_prog, :qa_prog
 
 	validates :video_id, :presence => true, :uniqueness => true
 
@@ -20,6 +19,9 @@ class Video < ActiveRecord::Base
   	self.translate_complete = false
   	self.type_complete = false
   	self.qa_complete = false
+    self.trans_prog = false
+    self.digi_prog = false
+    self.qa_prog = false
   end
 
   def amara_link
