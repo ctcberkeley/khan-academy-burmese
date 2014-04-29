@@ -14,39 +14,45 @@
           %tr
             %th.kabt_course Course
             %th.kabt_title Title
-            %th.kabt_dd Due Date
-            %th.kabt_id Name
+            %th.kabt_id Translator Name
+            %th.kabt_email E-Mail
 
 
           - @prog_trans.each do |video|
             %tr 
               %td= video.course
               %td= video.title
-              %td= video.due_date.strftime('%b %d %Y')
               %td= User.find(video.translator_id).name
+              %td= User.find(video.translator_id).email
 
         %h4{:class => "list-title"} Videos Being Digitized
         %table.table.table-bordered{:id => "list_table"}
           %tr
             %th.kabt_course Course
             %th.kabt_title Title
-            %th.kabt_dd Due Date
+            %th.kabt_id Translator Name
+            %th.kabt_email E-Mail
+
 
           - @prog_digi.each do |video|
             %tr 
               %td= video.course
               %td= video.title
-              %td= video.due_date.strftime('%b %d %Y')
+              %td= User.find(video.translator_id).name
+              %td= User.find(video.translator_id).email
 
         %h4{:class => "list-title"} Videos Being QA'd
         %table.table.table-bordered{:id => "list_table"}
           %tr
             %th.kabt_course Course
             %th.kabt_title Title
-            %th.kabt_dd Due Date
+            %th.kabt_id Translator Name
+            %th.kabt_email E-Mail
+
 
           - @prog_qa.each do |video|
             %tr 
               %td= video.course
               %td= video.title
-              %td= video.due_date.strftime('%b %d %Y')
+              %td= User.find(video.translator_id).name
+              %td= User.find(video.translator_id).email
